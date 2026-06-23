@@ -2,6 +2,7 @@ import { getServerSession } from "next-auth"
 import { authOptions } from "@/lib/auth"
 import { redirect } from "next/navigation"
 import { sql } from "@/lib/neon/client"
+import { ProjectCard } from "@/components/dashboard/ProjectCard"
 
 export default async function DashboardPage() {
   const session = await getServerSession(authOptions)
@@ -35,27 +36,7 @@ export default async function DashboardPage() {
         ) : (
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(260px, 1fr))", gap: 16 }}>
             {(projects as any[]).map(p => (
-              <div key={p.id} style={{ position: "relative", background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.08)", borderRadius: 12, padding: "20px 22px" }}>
-                <a href={"/dashboard/" + p.id + "/overview"} style={{ display: "block", textDecoration: "none" }}>
-                  <div style={{ fontSize: 15, fontWeight: 600, color: "#f1f5f9", marginBottom: 6 }}>{p.name}</div>
-                  <div style={{ fontSize: 11, color: "#475569", fontFamily: "monospace" }}>ID #{p.clickhouse_project_id}</div>
-                  <div style={{ marginTop: 16, fontSize: 12, color: "#818cf8" }}>Ver dashboard →</div>
-                </a>
-                <form action={"/api/projects/" + p.id} method="DELETE" style={{ position: "absolute", top: 12, right: 12 }}>
-                  <button
-                    type="button"
-                    onClick={async () => {
-                      if (!confirm("Tem certeza que deseja remover este projeto?")) return
-                      await fetch("/api/projects/" + p.id, { method: "DELETE" })
-                      window.location.reload()
-                    }}
-                    style={{ background: "none", border: "none", cursor: "pointer", color: "#475569", fontSize: 16, padding: 4 }}
-                    title="Remover projeto"
-                  >
-                    ✕
-                  </button>
-                </form>
-              </div>
+              <ProjectCard key={p.id} project={p as any} />
             ))}
             <a href="/dashboard/new-project" style={{ display: "flex", alignItems: "center", justifyContent: "center", textDecoration: "none", border: "1px dashed rgba(255,255,255,0.1)", borderRadius: 12, padding: "20px 22px", color: "#475569", fontSize: 13 }}>+ Novo projeto</a>
           </div>
