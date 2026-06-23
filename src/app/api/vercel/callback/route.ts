@@ -16,8 +16,8 @@ export async function GET(req: NextRequest) {
       method: "POST",
       headers: { "Content-Type": "application/x-www-form-urlencoded" },
       body: new URLSearchParams({
-        client_id: process.env.VERCEL_CLIENT_ID!,
-        client_secret: process.env.VERCEL_CLIENT_SECRET!,
+        client_id: process.env.HF_VERCEL_CLIENT_ID!,
+        client_secret: process.env.HF_VERCEL_CLIENT_SECRET!,
         code,
         redirect_uri: process.env.NEXT_PUBLIC_APP_URL + "/api/vercel/callback",
       }),
